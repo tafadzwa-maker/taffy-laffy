@@ -37,7 +37,7 @@ font-size:18px;
 line-hieght:
 
 /*Background Video */
-#bigVideo{
+#bgVideo{
 postion:fixed
 top:0 ;
 left:0;
