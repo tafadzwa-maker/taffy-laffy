@@ -1,0 +1,51 @@
+body{
+ font family:Arial, sans-serif;
+ bacground color: Blue 
+ margin:0;
+ padding:20px:
+}
+
+.nav{
+    background-color:Green 
+    padding:10px;
+    text-align:center;
+}
+.nav a{
+    color:white;
+    text-decoration:none;
+    padding:10px 20px;
+    display:inline-block:
+
+}
+.nav a:hover{
+    background-color:ocean blue 
+    border-radius:5px;
+
+}
+
+h1 {
+color:black 
+text-align:center;
+}
+
+p { 
+font-size:18px;
+
+p {  
+
+font-size:18px;
+line-hieght:
+
+/*Background Video */
+#bigVideo{
+postion:fixed
+top:0 ;
+left:0;
+min-width:100%;
+min-hieght:100%;
+width:auto;
+hieght:auto;
+z-index:-2
+object-fit:cover;
+}    
+
