@@ -1,3 +1,3 @@
-# taffy-laffy
-my first website 
-https://tafadzwa-maker.github.io/taffy-laffy/
+#Eskom Science Project ;
+https://taffy maker.io.github/2026 science pro;
+Learning to use HTML,CSS and Javascript;

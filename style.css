@@ -1,0 +1,255 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+.nav {
+    background-color: #333;
+    padding: 10px;
+    text-align: center;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: inline-block;
+}
+
+.nav a:hover {
+    background-color: #575757;
+    border-radius: 5px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+p {
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.question {
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.answer-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.answer-btn:hover {
+    background-color: #45a049;
+}
+
+.answer-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+#score {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Reset margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden; /* Hides scrollbars because video covers full height */
+    height: 100vh;
+}
+
+/* Background Video */
+#bgVideo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -2;
+    object-fit: cover; /* Ensures video covers the entire area without distortion */
+}
+
+/* Dark Overlay (improves text visibility) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+/* Main Content Container */
+.content {
+    position: relative;
+    z-index: 1; /* Places content above video and overlay */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    color: white;
+    padding: 1rem;
+}
+
+/* Picture frame + styling */
+.picture-frame {
+    margin-bottom: 2rem;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border: 4px solid rgba(255,255,255,0.9);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.picture-frame:hover {
+    transform: scale(1.05);
+}
+
+.picture-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the picture fills the circle nicely */
+    display: block;
+}
+
+/* Typography */
+.content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+.content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+/* Button styling */
+#muteBtn {
+    background-color: #ff6b6b;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    padding: 0.8rem 1.8rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+#muteBtn:hover {
+    background-color: #ff4757;
+    transform: scale(1.05);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .content h1 {
+        font-size: 2rem;
+    }
+    .content p {
+        font-size: 1rem;
+    }
+    .picture-frame {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+/* Report button centered and prominent */
+.report-center {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+#reportBtn {
+    background: linear-gradient(90deg,#ff5f6d,#ffc371);
+    border: none;
+    color: white;
+    padding: 18px 28px;
+    font-size: 1.15rem;
+    border-radius: 999px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    cursor: pointer;
+    font-weight: 700;
+}
+
+#reportBtn:hover { transform: translateY(-2px); }
+
+/* Modal overlay for choosing report type and map */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100;
+}
+
+.modal {
+    background: white;
+    width: 90%;
+    max-width: 1000px;
+    height: 80vh;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+}
+
+.modal .left { flex: 1 1 60%; }
+.modal .right { flex: 0 0 360px; border-left: 1px solid #eee; overflow-y: auto; }
+
+#map { width: 100%; height: 100%; }
+
+.report-types { padding: 16px; }
+.report-types button { margin: 6px 6px 6px 0; padding: 8px 12px; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; }
+
+.sidebar-form { padding: 16px; }
+.sidebar-form h3 { margin-bottom: 8px; }
+.sidebar-form label { display:block; margin-top:10px; font-weight:600; }
+.sidebar-form input[type="text"], .sidebar-form textarea { width:100%; padding:8px; margin-top:6px; border-radius:6px; border:1px solid #ccc; }
+.sidebar-form button { margin-top:12px; padding:10px 14px; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer; }
+
+.close-btn { position: absolute; right: 12px; top: 12px; background: transparent; border: none; font-size: 20px; cursor: pointer; }
+
+/* Sidebar like Google Maps reviews (floating card) */
+.review-card { padding: 12px; border-bottom: 1px solid #f0f0f0; }
+
+@media (max-width:600px) {
+    .modal { flex-direction: column; height: 90vh; }
+    .modal .right { flex-basis: 40%; max-height: 40%; }
+}
