@@ -1,23 +1,87 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>MY LAffY TAFFY</title>
-            <link rel="stylesheet"href=style.ccs">
-    <head>
-    <body>
-        <div class="nav "
-            <a href="index.html">Home/</a>
-            <a href="about.html">About</a>
-            <a href="quiz.html">Quiz</a>
-        </div> </body>
-        <h1>Welcome to my happy website!</h1>
-        <p>My own designed home page.</p>
-         <!--Background Video-->
-        <video id="bgVideo"autoplay muted loop playsinline preload="auto" poster.jpg"
-            <source src ="Video Project 1.mp4" type="video/mp4"
-            <source src="Video Project 1.mp4" type="video/webm"
-        </video>
-    <body>
-<html>
-   
+<head>
+    <title>My Awesome Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-sA+e2Yk6kQYgXn0w+e2D3l3s5G1p9mK2mZ5x5oM0+gI=" crossorigin=""/>
+</head>
+<body>
+    <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="quiz.html">Quiz</a>
+    </div>
+
+    <video id="bgVideo" autoplay muted loop playsinline preload="auto" poster="poster.jpg">
+        <source src="Video Project 1.mp4" type="video/mp4">
+        <source src="Video Project 1.mp4" type="video/webm">
+        Your browser does not support HTML5 video.
+    </video>
     
+    <!-- Centered Report Button -->
+    <div class="report-center">
+        <button id="reportBtn">Report your problem now</button>
+    </div>
+
+    <!-- Dark Overlay to improve text contrast -->
+    <div class="overlay"></div>
+
+    <!-- Main Content: includes your picture and text -->
+    <div class="content">
+        <!-- Picture element (your image) -->
+        <div class="picture-frame">
+            <img src="https://picsum.photos/id/1015/300/300" alt="Scenic mountain landscape example picture">
+            <!-- Replace 'https://picsum.photos/id/1015/300/300' with your own image file path -->
+        </div>
+        <h1>Welcome to My Creative Space</h1>
+        <p>Explore, learn, and build amazing things.</p>
+        <button id="muteBtn">🔊 Mute</button>
+    </div>
+
+    
+    <!-- Modal + Map + Sidebar -->
+    <div id="reportModal" class="modal-overlay">
+        <div class="modal" role="dialog" aria-modal="true">
+            <div class="left">
+                <button class="close-btn" id="closeModal">✕</button>
+                <div class="report-types" id="reportTypes">
+                    <h3 style="padding:16px 16px 0 16px;">What would you like to report?</h3>
+                    <div style="padding:0 16px 16px 16px;">
+                        <button data-type="pothole">Pothole</button>
+                        <button data-type="streetlight">Streetlight</button>
+                        <button data-type="garbage">Garbage / Dumping</button>
+                        <button data-type="sign">Damaged Sign</button>
+                        <button data-type="other">Other</button>
+                    </div>
+                </div>
+                <div id="map" style="height:calc(100% - 140px);"></div>
+            </div>
+            <div class="right">
+                <div class="sidebar-form" id="sidebarForm">
+                    <h3>Report details</h3>
+                    <div class="review-card">
+                        <strong>Selected type:</strong> <span id="selectedType">(none)</span>
+                    </div>
+                    <label>Location</label>
+                    <div style="margin-bottom:8px;">
+                        <button id="useCurrent">Use current location</button>
+                        <button id="clearMarker">Clear</button>
+                    </div>
+                    <label for="title">Title</label>
+                    <input id="title" type="text" placeholder="Short title">
+                    <label for="desc">Description</label>
+                    <textarea id="desc" rows="5" placeholder="Describe the issue"></textarea>
+                    <label for="reporter">Your name (optional)</label>
+                    <input id="reporter" type="text" placeholder="Name">
+                    <button id="submitReport">Submit report</button>
+                    <div id="submitMsg" style="margin-top:12px; color:green; display:none;">Report saved locally.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-o9N1j8gVQbqg6v3wq4l6E5y5f1b6q2x1Y6a2G6k3Poc=" crossorigin=""></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
