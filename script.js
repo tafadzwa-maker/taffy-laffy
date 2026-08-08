@@ -98,7 +98,7 @@ function closeModalFn() {
 }
 
 // When on the homepage, take user to full page map reporting UI.
-reportBtn.addEventListener('click', () => { window.location.href = 'map.html'; });
+reportBtn.addEventListener('click', () => { window.location.href = '/map.html'; });
 closeModal.addEventListener('click', closeModalFn);
 reportModal.addEventListener('click', (e) => { if (e.target===reportModal) closeModalFn(); });
 
