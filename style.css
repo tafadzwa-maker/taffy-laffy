@@ -152,24 +152,6 @@ body {
     max-width: 600px;
     line-height: 1.5;
 }
-
-/* Button styling */
-#muteBtn {
-    background-color: #ff6b6b;
-    border: none;
-    color: white;
-    font-size: 1rem;
-    padding: 0.8rem 1.8rem;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-#muteBtn:hover {
-    background-color: #ff4757;
-    transform: scale(1.05);
 }
 
 /* Responsive adjustments for smaller screens */
@@ -220,16 +202,22 @@ body {
     z-index: 1100;
 }
 
-.modal {
-    background: white;
-    width: 90%;
-    max-width: 1000px;
-    height: 80vh;
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
+report-types button {
+    margin:6px 6px 6px 0;
+    padding:8px 12px;
+    border-radius:6px;
+    border: 1px soild #ddd
+    cursor:pointer;
+    white-space :nowrap;/*stops text wrapping */
+    flex-shrink:0; /*stops flex from squshing it */
 }
+.report-types{
 
+    padding: 16px;
+    display:flex;
+    flex-wrap:wrap;/* lets buttons go to next line instead of cutting */
+
+        
 .modal .left { flex: 1 1 60%; }
 .modal .right { flex: 0 0 360px; border-left: 1px solid #eee; overflow-y: auto; }
 
