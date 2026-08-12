@@ -119,6 +119,54 @@ function submitReport() {
     localStorage.setItem('reports', JSON.stringify(reports));
     const msg = document.getElementById('submitMsg'); msg.style.display='block';
     setTimeout(() => { msg.style.display='none'; }, 1400);
+}<h3>Drop a pin for the issue location</h3>
+<div id="map" style="height: 400px; width: 100%; border-radius: 8px; margin: 12px 0;"></div>
+<button type="button" id="useGPS">📍 Use My Current Location</button>
+<p>Selected: <span id="coords">Click on map</span></p>
+
+<!-- Hidden inputs for your form -->
+<input type="hidden" id="latitude" name="latitude">
+<input type="hidden" id="longitude" name="longitude">
+
+<script>
+let map;
+let marker;
+
+function initMap() {
+  // Start at Cape Town
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: -33.9249, lng: 18.4241 }, 
+    zoom: 12,
+  });
+
+  map.addListener("click", (e) => {
+    placeMarker(e.latLng);
+  });
+
+  document.getElementById("useGPS").onclick = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const pos = { lat: position.coords.latitude, lng: position.coords.longitude };
+        map.setCenter(pos);
+        map.setZoom(16);
+        placeMarker(pos);
+      });
+    } else {
+      alert("GPS not supported");
+    }
+  }
 }
+
+function placeMarker(location) {
+  if (marker) marker.setMap(null);
+  marker = new google.maps.Marker({ position: location, map: map });
+  document.getElementById('coords').innerText = location.lat().toFixed(5) + ', ' + location.lng().toFixed(5);
+  document.getElementById('latitude').value = location.lat();
+  document.getElementById('longitude').value = location.lng();
+}
+</script>
+
+<!-- PUT YOUR API KEY HERE -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 
 window.addEventListener('load', init);
