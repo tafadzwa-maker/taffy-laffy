@@ -34,8 +34,8 @@ function init() {
     map = L.map(mapEl).setView([-33.931000, 18.859000], 13);
 
     L.tileLayer(
-       'https://{s}.tile.openstreermap.org/{z}/{x}/{y}.png'attribution:@OpenStreetMapcontributors'
-    ).addTo(map);
+       'https://{s}.tile.openstreermap.org/{z}/{x}/{y}.png',attribution:@OpenStreetMapcontributors'
+}).addTo(map);
 
     // create a default marker at center (hidden until set)
     marker = L.marker([0,0], { draggable: true, opacity: 0 }).addTo(map);
