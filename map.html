@@ -5,62 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report a problem - Map</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com" crossorigin=""/>
     <style>
-        body { overflow: hidden; }
-        .map-page { display:flex; height:100vh; }
-        .map-left { flex:1; position:relative; }
-        .map-right { width:360px; border-left:1px solid #eee; overflow-y:auto; background:#fff; padding:16px; }
-        #map { height:100%; }
+        body { overflow: hidden; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        .map-page { display:flex; height:100vh; width: 100vw; }
+        .map-left { flex:1; position:relative; height: 100%; }
+        .map-right { width:360px; border-left:1px solid #eee; overflow-y:auto; background:#fff; padding:16px; display: flex; flex-direction: column; }
+        #map { height:100%; width: 100%; }
         .type-grid { display:flex; gap:8px; flex-wrap:wrap; }
-        .type-btn { width:64px; height:64px; border-radius:8px; border:2px solid transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; }
-        .type-btn.selected { outline:3px solid #333; transform:translateY(-4px); }
+        .type-btn { padding: 8px 12px; border-radius:8px; border:2px solid transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; }
+        .type-btn.selected { outline:3px solid #333; transform:translateY(-2px); }
         .controls { margin-top:12px; }
-        .location-hint { margin-top:8px; font-size:0.9rem; color:#555; }
-        .color-preview { width:48px; height:48px; border-radius:6px; display:inline-block; vertical-align:middle; margin-left:8px; border:1px solid #ddd; }
+        .location-hint { margin-top:8px; font-size:0.9rem; color:#555; font-weight: bold; }
+        .color-preview { width:32px; height:32px; border-radius:50%; display:inline-block; vertical-align:middle; margin-left:8px; border:1px solid #ddd; }
+        
+        /* Interactive Form Element Styling */
+        input[type="text"], textarea { width:100%; padding:8px; margin-top:6px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; }
+        label { font-weight:700; display:block; margin-top:12px; color: #333; }
+        button { padding: 10px; border-radius: 4px; border: 1px solid #ccc; background: #f8f9fa; cursor: pointer; font-weight: bold; }
+        #submitBtn { background: #28a745; color: white; border: none; padding: 12px; font-size: 16px; width: 100%; margin-top: 15px; }
+        #submitBtn:hover { background: #218838; }
     </style>
 </head>
 <body>
     <div class="map-page">
+        <!-- Interactive Leaflet Canvas Rendering Area -->
         <div class="map-left">
             <div id="map"></div>
         </div>
+        
+        <!-- Sidebar Form Parameters Input Controller Controls -->
         <div class="map-right">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #eee; padding-bottom: 10px;">
                 <h3 style="margin:0">Select Type of Issue</h3>
-                <a href="index.html" style="text-decoration:none;color:#007bff;">Back</a>
+                <a href="index.html" style="text-decoration:none; color:#007bff; font-weight: bold;">✕ Close</a>
             </div>
 
-            <div class="type-grid" id="typeGrid" style="margin-top:12px;">
-                <!-- buttons inserted by map.js -->
-            </div>
+            <!-- Buttons container populated dynamically by map.js javascript map arrays -->
+            <div class="type-grid" id="typeGrid" style="margin-top:14px;"></div>
 
             <div class="controls">
-                <label style="font-weight:700; display:block; margin-top:12px;">Location</label>
-                <div style="margin-top:8px;">
-                    <button id="useCurrentBtn">Use current location</button>
-                    <button id="enableDragBtn">Select location (drag pin)</button>
+                <label>Location Setup</label>
+                <div style="margin-top:8px; display: flex; gap: 6px;">
+                    <button id="useCurrentBtn" type="button">📍 Use GPS Location</button>
+                    <button id="enableDragBtn" type="button">Drag Pin Location</button>
                 </div>
                 <div class="location-hint" id="latlngDisplay">No location selected</div>
             </div>
 
-            <div style="margin-top:12px;">
-                <label style="font-weight:700; display:block;">Title</label>
-                <input id="title" type="text" placeholder="Short title" style="width:100%; padding:8px; margin-top:6px;" />
-                <label style="font-weight:700; display:block; margin-top:8px;">Description</label>
-                <textarea id="desc" rows="4" style="width:100%; padding:8px; margin-top:6px;"></textarea>
-                <input id="reporter" type="text" style="width:100%; padding:8px; margin-top:6px;" />
-                    <button id="submitBtn" style="flex:1;">Submit report</button>
-                    <div id="previewLabel" style="font-size:0.9rem; color:#333;">Preview</div>
+            <div style="margin-top:12px; flex-grow: 1;">
+                <label for="title">Title</label>
+                <input id="title" type="text" placeholder="e.g., Deep pothole in left lane" />
+                
+                <label for="desc">Description</label>
+                <textarea id="desc" rows="4" placeholder="Provide details about the issue..."></textarea>
+                
+                <!-- FIXED: Restructured clean form inputs and added missing label text elements -->
+                <label for="reporter">Your Name (Reporter)</label>
+                <input id="reporter" type="text" placeholder="Anonymous / Your Name" />
+                
+                <!-- FIXED: Removed stray broken closing block tags causing visual shifts -->
+                <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 10px; border-radius: 6px;">
+                    <div id="previewLabel" style="font-size:0.9rem; color:#333; font-weight: bold;">Selected Color:</div>
                     <div id="colorPreview" class="color-preview"></div>
                 </div>
-                <div id="submitMsg" style="margin-top:12px; color:green; display:none;">Report saved locally.</div>
+
+                <button id="submitBtn" type="button">Submit Report</button>
+                <div id="submitMsg" style="margin-top:12px; color:green; font-weight: bold; text-align: center; display:none;">Report saved locally!</div>
             </div>
         </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- Script assets dependencies injection execution setup elements -->
+    <script src="https://unpkg.com" crossorigin=""></script>
+    
+    <!-- This references your main map script execution rules container -->
     <script src="map.js"></script>
 </body>
 </html>
-</div>
+
