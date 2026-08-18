@@ -165,7 +165,7 @@ function placeMarker(location) {
 }
 </script>
 
-<!-- PUT YOUR API KEY HERE -->
+<!-- ADD YOUR API KEY HERE -->
 <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 
 window.addEventListener('load', init);
