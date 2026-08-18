@@ -73,17 +73,27 @@ function init() {
 
 function selectType(typeId) {
     selectedType = types.find(t => t.id === typeId);
-    // highlight selected
-    document.querySelectorAll('.type-btn').forEach(b => b.classList.toggle('selected', b.dataset.type === typeId));
-    // update preview color
-    const preview = document.getElementById('colorPreview');
-    preview.style.background = selectedType.color;
-    // update marker icon color if marker exists
+    
+    // Highlight selected button visually
+    document.querySelectorAll('.type-btn').forEach(b => {
+        b.classList.toggle('selected', b.dataset.type === typeId);
+    });
+    
+    // Update live color preview circle
+    if (colorPreview) colorPreview.style.backgroundColor = selectedType.color;
+    
+    // FIXED: Safely look for the element by its correct ID so the script doesn't crash
+    const sidebarLabel = document.getElementById('selectedType');
+    if (sidebarLabel) {
+        sidebarLabel.innerText = selectedType.label;
+    }
+    
+    // Update active pin color instantly if marker exists
     if (marker) {
         marker.setIcon(createIcon(selectedType.color));
-        marker.setOpacity(1);
     }
 }
+
 
 function setMarker(lat, lng) {
     marker.setLatLng([lat, lng]);
