@@ -3,84 +3,91 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report a problem - Map</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com" crossorigin=""/>
+    <title>Report a problem - Map Page</title>
+    <!-- 1. Leaflet Stylesheet (Ensures map tiles display correctly instead of grey) -->
+    <link rel="stylesheet" href="https://unpkg.com" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <style>
-        body { overflow: hidden; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-        .map-page { display:flex; height:100vh; width: 100vw; }
-        .map-left { flex:1; position:relative; height: 100%; }
-        .map-right { width:360px; border-left:1px solid #eee; overflow-y:auto; background:#fff; padding:16px; display: flex; flex-direction: column; }
-        #map { height:100%; width: 100%; }
-        .type-grid { display:flex; gap:8px; flex-wrap:wrap; }
-        .type-btn { padding: 8px 12px; border-radius:8px; border:2px solid transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; }
-        .type-btn.selected { outline:3px solid #333; transform:translateY(-2px); }
-        .controls { margin-top:12px; }
-        .location-hint { margin-top:8px; font-size:0.9rem; color:#555; font-weight: bold; }
-        .color-preview { width:32px; height:32px; border-radius:50%; display:inline-block; vertical-align:middle; margin-left:8px; border:1px solid #ddd; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; }
         
-        /* Interactive Form Element Styling */
-        input[type="text"], textarea { width:100%; padding:8px; margin-top:6px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; }
-        label { font-weight:700; display:block; margin-top:12px; color: #333; }
-        button { padding: 10px; border-radius: 4px; border: 1px solid #ccc; background: #f8f9fa; cursor: pointer; font-weight: bold; }
-        #submitBtn { background: #28a745; color: white; border: none; padding: 12px; font-size: 16px; width: 100%; margin-top: 15px; }
-        #submitBtn:hover { background: #218838; }
+        .map-page { display: flex; height: 100vh; width: 100vw; }
+        .map-left { flex: 1; position: relative; height: 100%; }
+        
+        /* Dedicated Side Panel Layout styling */
+        .map-right { width: 380px; border-left: 1px solid #ddd; overflow-y: auto; background: #fff; padding: 20px; display: flex; flex-direction: column; box-shadow: -2px 0 10px rgba(0,0,0,0.05); }
+        #map { height: 100%; width: 100%; background: #e5e3df; }
+        
+        /* Categorized Buttons Structure Grid */
+        .type-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .type-btn { flex: 1 1 calc(50% - 8px); padding: 12px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; text-align: center; transition: all 0.2s ease; }
+        .type-btn.selected { outline: 3px solid #333; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        
+        /* Form inputs visual layout formatting styling */
+        label { font-weight: 700; display: block; margin-top: 16px; color: #444; font-size: 14px; }
+        input[type="text"], textarea { width: 100%; padding: 10px; margin-top: 6px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 14px; }
+        
+        .control-btns { display: flex; gap: 8px; margin-top: 8px; }
+        .control-btns button { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #ccc; background: #f8f9fa; cursor: pointer; font-weight: bold; font-size: 13px; }
+        #useCurrentBtn { background: #28a745; color: white; border: none; }
+        #useCurrentBtn:hover { background: #218838; }
+        #clearMarkerBtn { background: #dc3545; color: white; border: none; }
+        #clearMarkerBtn:hover { background: #bd2130; }
+        
+        #submitBtn { background: #007bff; color: white; border: none; padding: 14px; font-size: 16px; border-radius: 6px; width: 100%; margin-top: 20px; font-weight: bold; cursor: pointer; }
+        #submitBtn:hover { background: #0069d9; }
+        
+        .location-hint { margin-top: 8px; font-size: 13px; color: #666; font-style: italic; }
+        .review-card { padding: 12px; background: #f8f9fa; border-radius: 6px; margin-top: 8px; border: 1px solid #dee2e6; font-size: 14px; }
     </style>
 </head>
 <body>
     <div class="map-page">
-        <!-- Interactive Leaflet Canvas Rendering Area -->
+        <!-- Map Canvas container window panel component workspace space -->
         <div class="map-left">
             <div id="map"></div>
         </div>
         
-        <!-- Sidebar Form Parameters Input Controller Controls -->
+        <!-- Dedicated Side panel reporting layout controls form block container framework -->
         <div class="map-right">
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                <h3 style="margin:0">Select Type of Issue</h3>
-                <a href="index.html" style="text-decoration:none; color:#007bff; font-weight: bold;">✕ Close</a>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 12px;">
+                <h3 style="color: #333;">Report an Issue</h3>
+                <a href="index.html" style="text-decoration: none; color: #007bff; font-weight: bold; font-size: 14px;">✕ Back Home</a>
             </div>
 
-            <!-- Buttons container populated dynamically by map.js javascript map arrays -->
-            <div class="type-grid" id="typeGrid" style="margin-top:14px;"></div>
-
-            <div class="controls">
-                <label>Location Setup</label>
-                <div style="margin-top:8px; display: flex; gap: 6px;">
-                    <button id="useCurrentBtn" type="button">📍 Use GPS Location</button>
-                    <button id="enableDragBtn" type="button">Drag Pin Location</button>
-                </div>
-                <div class="location-hint" id="latlngDisplay">No location selected</div>
+            <label>What would you like to report?</label>
+            <div class="type-grid" id="typeGrid">
+                <!-- Category type option select elements buttons generated via script properties execution loop parameters dynamically -->
             </div>
 
-            <div style="margin-top:12px; flex-grow: 1;">
-                <label for="title">Title</label>
-                <input id="title" type="text" placeholder="e.g., Deep pothole in left lane" />
-                
-                <label for="desc">Description</label>
-                <textarea id="desc" rows="4" placeholder="Provide details about the issue..."></textarea>
-                
-                <!-- FIXED: Restructured clean form inputs and added missing label text elements -->
-                <label for="reporter">Your Name (Reporter)</label>
-                <input id="reporter" type="text" placeholder="Anonymous / Your Name" />
-                
-                <!-- FIXED: Removed stray broken closing block tags causing visual shifts -->
-                <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 10px; border-radius: 6px;">
-                    <div id="previewLabel" style="font-size:0.9rem; color:#333; font-weight: bold;">Selected Color:</div>
-                    <div id="colorPreview" class="color-preview"></div>
-                </div>
-
-                <button id="submitBtn" type="button">Submit Report</button>
-                <div id="submitMsg" style="margin-top:12px; color:green; font-weight: bold; text-align: center; display:none;">Report saved locally!</div>
+            <div class="review-card">
+                <strong>Selected Type:</strong> <span id="selectedType">(None Selected)</span>
             </div>
+
+            <label>Location Coordinate Target</label>
+            <div class="control-btns">
+                <button id="useCurrentBtn" type="button">📍 Use GPS Position</button>
+                <button id="clearMarkerBtn" type="button">Clear Pin</button>
+            </div>
+            <div class="location-hint" id="latlngDisplay">No location selected. Click on the map to drop a pin.</div>
+
+            <label for="title">Issue Title</label>
+            <input id="title" type="text" placeholder="Short descriptive title" />
+            
+            <label for="desc">Detailed Description</label>
+            <textarea id="desc" rows="4" placeholder="Describe the problem layout circumstances parameters..."></textarea>
+            
+            <label for="reporter">Reporter Name (Optional)</label>
+            <input id="reporter" type="text" placeholder="Your name or Anonymous" />
+            
+            <button id="submitBtn" type="button">Submit Report</button>
+            <div id="submitMsg" style="margin-top: 12px; color: green; font-weight: bold; text-align: center; display: none;">Report saved locally!</div>
         </div>
     </div>
 
-    <!-- Script assets dependencies injection execution setup elements -->
-    <script src="https://unpkg.com" crossorigin=""></script>
+    <!-- 2. Leaflet JavaScript Engine Code Script Bundle Link Dependency Asset Execution Layer -->
+    <script src="https://unpkg.com" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
-    <!-- This references your main map script execution rules container -->
+    <!-- 3. Dedicated clean application javascript logic engine setup configuration controls rules pipeline file reference -->
     <script src="map.js"></script>
 </body>
 </html>
-
