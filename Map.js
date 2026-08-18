@@ -1,9 +1,9 @@
 
 // Map page script: initializes map, draggable colored pin, and sidebar interactions
 const types = [
-    {  button id: 'pothole', label: 'Pothole', color: '#d9534f' },
-    { button id: 'streetlight', label: 'Streetlight', color: '#f0ad4e' },
-    {  button id: 'garbage', label: 'Garbage', color: '#5cb85c' },
+    {button id: 'pothole', label: 'Pothole', color: '#d9534f' },
+    {button id: 'streetlight', label: 'Streetlight', color: '#f0ad4e' },
+    {button id: 'garbage', label: 'Garbage', color: '#5cb85c' },
     {button id: 'sign', label: 'Sign', color: '#5bc0de' },
     {button id: 'other', label: 'Other', color: '#6c757d' }
 ];
