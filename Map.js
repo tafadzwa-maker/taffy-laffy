@@ -51,11 +51,11 @@ function init() {
     types.forEach(t => {
         const btn = document.createElement('button');
         btn.className = 'type-btn';
-        btn.style.background = t.color;
-        btn.innerText = t.label[0];
-        btn.title = t.label;
-        btn.dataset.type = t.id;
-        btn.dataset.color = t.color;
+        btn.style.background =t.color;
+        btn.innerText =t.label[0];
+        btn.title =t.label;
+        btn.dataset.type =t.id;
+        btn.dataset.color =t.color;
         btn.addEventListener('click', () => { selectType(t.id); });
         typeGrid.appendChild(btn);
     });
@@ -163,9 +163,5 @@ function placeMarker(location) {
   document.getElementById('latitude').value = location.lat();
   document.getElementById('longitude').value = location.lng();
 }
-</script>
-
-<!-- ADD YOUR API KEY HERE -->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
-
-window.addEventListener('load', init);
+</body>
+</html>
