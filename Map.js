@@ -34,8 +34,7 @@ function init() {
     map = L.map(mapEl).setView([-33.931000, 18.859000], 13);
 
     L.tileLayer(
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        { attribution: 'Tiles © Esri — Source: Esri, Garmin, GeoEye, Earthstar Geographics', maxZoom: 19 }
+       
     ).addTo(map);
 
     // create a default marker at center (hidden until set)
