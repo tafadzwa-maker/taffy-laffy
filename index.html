@@ -19,9 +19,13 @@
     </video>
     
     <!-- Centered Report Button -->
-    <div class="report-center">
-        <button id="reportBtn">Report your problem now!</button>  
-    </div>
+    .report-center {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
 
     <!-- Dark Overlay to improve text contrast -->
     <div class="overlay"></div>
