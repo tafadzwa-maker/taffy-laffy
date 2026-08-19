@@ -107,9 +107,14 @@ if (reportBtn) {
 if (closeModal) {
     closeModal.addEventListener('click', closeModalFn);
 }
-if (reportModal) {
-    reportModal.addEventListener('click', (e) => { if (e.target === reportModal) closeModalFn(); });
-}
+if (submitReport) {
+    submitReport.addEventListener('click', async () => {
+
+        const titleElem = document.getElementById('title');
+        const descElem = document.getElementById('desc');
+        const reporterElem = document.getElementById('reporter');
+        const attachmentElem = document.getElementById('attachment');
+
 
 reportTypeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
