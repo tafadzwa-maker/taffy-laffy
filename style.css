@@ -1,18 +1,38 @@
-/* --- Global Reset & Foundation --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, sans-serif;
     background-color: #f0f0f0;
-    overflow-x: hidden;
-    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
 }
 
-/* --- Quiz UI Elements --- */
+.nav {
+    background-color: #333;
+    padding: 10px;
+    text-align: center;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: inline-block;
+}
+
+.nav a:hover {
+    background-color: #575757;
+    border-radius: 5px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+p {
+    font-size: 18px;
+    line-height: 1.5;
+}
+
 .question {
     background: white;
     border-radius: 8px;
@@ -45,26 +65,20 @@ body {
     font-size: 20px;
 }
 
-/* --- Interactive Navigation Menu --- */
-.nav {
-    background-color: #333;
-    padding: 10px;
-    text-align: center;
+/* Reset margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.nav a {
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    display: inline-block;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden; /* Hides scrollbars because video covers full height */
+    height: 100vh;
 }
 
-.nav a:hover {
-    background-color: #575757;
-    border-radius: 5px;
-}
-
-/* --- Full Screen Background Video Elements --- */
+/* Background Video */
 #bgVideo {
     position: fixed;
     top: 0;
@@ -74,9 +88,10 @@ body {
     width: auto;
     height: auto;
     z-index: -2;
-    object-fit: cover;
+    object-fit: cover; /* Ensures video covers the entire area without distortion */
 }
 
+/* Dark Overlay (improves text visibility) */
 .overlay {
     position: fixed;
     top: 0;
@@ -87,10 +102,10 @@ body {
     z-index: -1;
 }
 
-/* --- Hero Layout Content Layer --- */
+/* Main Content Container */
 .content {
     position: relative;
-    z-index: 1;
+    z-index: 1; /* Places content above video and overlay */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -101,6 +116,7 @@ body {
     padding: 1rem;
 }
 
+/* Picture frame + styling */
 .picture-frame {
     margin-bottom: 2rem;
     border-radius: 50%;
@@ -119,22 +135,17 @@ body {
 .picture-frame img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* Ensures the picture fills the circle nicely */
     display: block;
 }
 
+/* Typography */
 .content h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
     text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
 }
-.modal .left { 
-    flex: 1 1 60%; 
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    min-width: 0;
-}
+
 .content p {
     font-size: 1.2rem;
     margin-bottom: 2rem;
@@ -142,190 +153,26 @@ body {
     line-height: 1.5;
 }
 
-/* --- Trigger Core Launch Button --- */
-.modal .left { 
-    flex: 1 1 60%; 
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    min-width: 0;
-}
-
-#reportBtn {
-    background: linear-gradient(90deg, #ff5f6d, #ffc371);
+/* Button styling */
+#muteBtn {
+    background-color: #ff6b6b;
     border: none;
     color: white;
-    padding: 18px 28px;
-    font-size: 1.15rem;
-    border-radius: 999px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    font-size: 1rem;
+    padding: 0.8rem 1.8rem;
+    border-radius: 50px;
     cursor: pointer;
-    font-weight: 700;
-    transition: transform 0.2s ease;
+    transition: background 0.3s, transform 0.2s;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-#reportBtn:hover { 
-    transform: scale(1.02); 
+#muteBtn:hover {
+    background-color: #ff4757;
+    transform: scale(1.05);
 }
 
-/* --- Repaired Dialog Modal Structure Layout --- */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    display: none; /* Controlled dynamically via script.js */
-    align-items: center;
-    justify-content: center;
-    z-index: 1100;
-    padding: 20px;
-}
-
-/* FIXED: Added missing core parent structural container styling */
-.modal {
-    background: white;
-    width: 100%;
-    max-width: 950px;
-    height: 80vh;
-    border-radius: 12px;
-    display: flex;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-}
-
-/* FIXED: Integrated clean flex-ratio alignments */
-.modal .left { 
-    flex: 1 1 60%; 
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.modal .right { 
-    flex: 0 0 360px; 
-    border-left: 1px solid #eee; 
-    overflow-y: auto;
-    background: #fafafa;
-}
-
-/* FIXED: Assigned fixed explicit dimension canvas space bounds for Leaflet tiles */
-#map { 
-    width: 100%; 
-    height: 100%;
-    z-index: 1;
-}
-
-/* FIXED: Patched unclosed brackets, class dot notation selectors, and typos */
-.report-types { 
-    padding: 16px; 
-    display: flex;
-    flex-wrap: wrap;
-    background: #fff;
-    border-bottom: 1px solid #eee;
-}
-
-.report-types button { 
-    margin: 6px 6px 6px 0; 
-    padding: 8px 12px; 
-    border-radius: 6px; 
-    border: 1px solid #ddd; 
-    background: #f8f9fa;
-    cursor: pointer; 
-    white-space: nowrap;
-    flex-shrink: 0;
-    font-weight: 600;
-    transition: background 0.2s ease;
-}
-
-.report-types button:hover {
-    background: #e2e6ea;
-}
-
-/* --- Form Input Component Details Controls --- */
-.sidebar-form { 
-    padding: 16px; 
-}
-
-.sidebar-form h3 { 
-    margin-bottom: 8px; 
-    color: #333;
-}
-
-.sidebar-form label { 
-    display: block; 
-    margin-top: 14px; 
-    font-weight: 600; 
-    color: #555;
-    font-size: 14px;
-}
-
-.sidebar-form input[type="text"], 
-.sidebar-form textarea { 
-    width: 100%; 
-    padding: 10px; 
-    margin-top: 6px; 
-    border-radius: 6px; 
-    border: 1px solid #ccc; 
-    font-family: inherit;
-}
-
-.sidebar-form button { 
-    margin-top: 12px; 
-    padding: 10px 14px; 
-    background: #007bff; 
-    color: white; 
-    border: none; 
-    border-radius: 6px; 
-    cursor: pointer; 
-    font-weight: 600;
-    width: 100%;
-}
-
-.sidebar-form button:hover {
-    background: #0056b3;
-}
-
-#useCurrent {
-    background: #28a745 !important;
-}
-#useCurrent:hover {
-    background: #218838 !important;
-}
-
-#clearMarker {
-    background: #dc3545 !important;
-}
-#clearMarker:hover {
-    background: #c82333 !important;
-}
-
-.close-btn { 
-    position: absolute; 
-    right: 12px; 
-    top: 12px; 
-    background: #fff; 
-    border: 1px solid #ddd; 
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    font-size: 16px; 
-    cursor: pointer; 
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.review-card { 
-    padding: 12px; 
-    background: #e9ecef;
-    border-radius: 6px;
-    margin-top: 5px;
-    border: 1px solid #dee2e6;
-}
-
-/* --- Media Queries Responsive Adjustments --- */
+/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
     .content h1 {
         font-size: 2rem;
@@ -339,15 +186,71 @@ body {
     }
 }
 
-@media (max-width: 700px) {
-    .modal { 
-        flex-direction: column; 
-        height: 90vh; 
-    }
-    .modal .right { 
-        flex-basis: auto; 
-        max-height: 50%; 
-        border-left: none;
-        border-top: 1px solid #eee;
-    }
+/* Report button centered and prominent */
+.report-center {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
 }
+
+#reportBtn {
+    background: linear-gradient(90deg,#ff5f6d,#ffc371);
+    border: none;
+    color: white;
+    padding: 18px 28px;
+    font-size: 1.15rem;
+    border-radius: 999px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    cursor: pointer;
+    font-weight: 700;
+}
+
+#reportBtn:hover { transform: translateY(-2px); }
+
+/* Modal overlay for choosing report type and map */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100;
+}
+
+.modal {
+    background: white;
+    width: 90%;
+    max-width: 1000px;
+    height: 80vh;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+}
+
+.modal .left { flex: 1 1 60%; }
+.modal .right { flex: 0 0 360px; border-left: 1px solid #eee; overflow-y: auto; }
+
+#map { width: 100%; height: 100%; }
+
+.report-types { padding: 16px; }
+.report-types button { margin: 6px 6px 6px 0; padding: 8px 12px; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; }
+
+.sidebar-form { padding: 16px; }
+.sidebar-form h3 { margin-bottom: 8px; }
+.sidebar-form label { display:block; margin-top:10px; font-weight:600; }
+.sidebar-form input[type="text"], .sidebar-form textarea { width:100%; padding:8px; margin-top:6px; border-radius:6px; border:1px solid #ccc; }
+.sidebar-form button { margin-top:12px; padding:10px 14px; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer; }
+
+.close-btn { position: absolute; right: 12px; top: 12px; background: transparent; border: none; font-size: 20px; cursor: pointer; }
+
+/* Sidebar like Google Maps reviews (floating card) */
+.review-card { padding: 12px; border-bottom: 1px solid #f0f0f0; }
+
+@media (max-width:600px) {
+    .modal { flex-direction: column; height: 90vh; }
+    .modal .right { flex-basis: 40%; max-height: 40%; }
+}
+
