@@ -160,7 +160,7 @@ function initMap() {
         placeMarker(pos);
       });
     } else {
-      alert("GPS not supported");
+      alert("GPS  supported");
     }
   }
 }
