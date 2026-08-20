@@ -32,20 +32,8 @@ const muteButton = document.getElementById('muteBtn');
 // Variable to track mute state (initially true because video starts with muted attribute)
 let isMuted = true;
 
-// Function to toggle sound
-function toggleMute() {
-    if (isMuted) {
-        video.muted = false;
-        muteButton.textContent = '🔊 Unmute';
-        muteButton.style.backgroundColor = '#4caf50'; // greenish tone when sound is on
-        isMuted = false;
-    } else {
-        video.muted = true;
-        muteButton.textContent = '🔊 Mute';
-        muteButton.style.backgroundColor = '#ff6b6b';
-        isMuted = true;
-    }
-}
+
+
 
 // Add event listener to the button
 muteButton.addEventListener('click', toggleMute);
@@ -137,7 +125,7 @@ function placeMarker(latlng) {
 }
 
 useCurrent.addEventListener('click', () => {
-    if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
+    if (!navigator.geolocation) { alert('Geolocation supported'); return; }
     navigator.geolocation.getCurrentPosition(pos => {
         const latlng = [pos.coords.latitude, pos.coords.longitude];
         placeMarker(latlng);
