@@ -1,15 +1,8 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="style.css">
-   <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIINfQ3MZc+4g0M5Y4yJ6X6v5V9Y6Y4Y5Y="
-    crossorigin=""/>
-
-</head>
-<body>
+    
+<body>  
 
      <!-- Background Video -->
     <video id="bgVideo" autoplay muted loop playsinline preload="auto" poster="poster.jpg">
@@ -19,18 +12,12 @@
     </video>
     
     <!-- Centered Report Button -->
-    .report-center {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-}
+    <div class="report-center">
+        <button id="reportBtn">Report your problem now</button>
+    </div>
 
     <!-- Dark Overlay to improve text contrast -->
     <div class="overlay"></div>
-
-    
     
     <!-- Modal + Map + Sidebar -->
     <div id="reportModal" class="modal-overlay">
@@ -47,7 +34,7 @@
                         <button data-type="other">Other</button>
                     </div>
                 </div>
-               <div id="map"style="height:500px;"></div>
+                <div id="map" style="height:calc(100% - 140px);"></div>
             </div>
             <div class="right">
                 <div class="sidebar-form" id="sidebarForm">
@@ -58,12 +45,13 @@
                     <label>Location</label>
                     <div style="margin-bottom:8px;">
                         <button id="useCurrent">Use current location</button>
-                        <button id="draglocationMarker">Drag Location</button>
+                        <button id="clearMarker">Clear</button>
                     </div>
                     <label for="title">Title</label>
                     <input id="title" type="text" placeholder="Short title">
                     <label for="desc">Description</label>
                     <textarea id="desc" rows="5" placeholder="Describe the issue"></textarea>
+                   
                     <button id="submitReport">Submit report</button>
                     <div id="submitMsg" style="margin-top:12px; color:green; display:none;">Report saved locally.</div>
                 </div>
