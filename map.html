@@ -3,89 +3,65 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report a problem - Map Page</title>
-    <!-- 1. Leaflet Stylesheet (Ensures map tiles display correctly instead of grey) -->
-   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <title>Report a problem - Map</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; }
-        
-        .map-page { display: flex; height: 100vh; width: 100vw; }
-        .map-left { flex: 1; position: relative; height: 100%; }
-        
-        /* Dedicated Side Panel Layout styling */
-        .map-right { width: 380px; border-left: 1px solid #ddd; overflow-y: auto; background: #fff; padding: 20px; display: flex; flex-direction: column; box-shadow: -2px 0 10px rgba(0,0,0,0.05); }
-        #map { height: 100%; width: 100%; background: #e5e3df; }
-        
-        /* Categorized Buttons Structure Grid */
-        .type-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-        .type-btn { flex: 1 1 calc(50% - 8px); padding: 12px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; color: #fff; font-weight: 700; font-size: 14px; text-align: center; transition: all 0.2s ease; }
-        .type-btn.selected { outline: 3px solid #333; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-        
-        /* Form inputs visual layout formatting styling */
-        label { font-weight: 700; display: block; margin-top: 16px; color: #444; font-size: 14px; }
-        input[type="text"], textarea { width: 100%; padding: 10px; margin-top: 6px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size: 14px; }
-        
-        .control-btns { display: flex; gap: 8px; margin-top: 8px; }
-        .control-btns button { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #ccc; background: #f8f9fa; cursor: pointer; font-weight: bold; font-size: 13px; }
-        #useCurrentBtn { background: #28a745; color: white; border: none; }
-        #useCurrentBtn:hover { background: #218838; }
-        #clearMarkerBtn { background: #dc3545; color: white; border: none; }
-        #clearMarkerBtn:hover { background: #bd2130; }
-        
-        #submitBtn { background: #007bff; color: white; border: none; padding: 14px; font-size: 16px; border-radius: 6px; width: 100%; margin-top: 20px; font-weight: bold; cursor: pointer; }
-        #submitBtn:hover { background: #0069d9; }
-        
-        .location-hint { margin-top: 8px; font-size: 13px; color: #666; font-style: italic; }
-        .review-card { padding: 12px; background: #f8f9fa; border-radius: 6px; margin-top: 8px; border: 1px solid #dee2e6; font-size: 14px; }
+        body { overflow: hidden; }
+        .map-page { display:flex; height:100vh; }
+        .map-left { flex:1; position:relative; }
+        .map-right { width:360px; border-left:1px solid #eee; overflow-y:auto; background:#fff; padding:16px; }
+        #map { height:100%; }
+        .type-grid { display:flex; gap:8px; flex-wrap:wrap; }
+        .type-btn { width:64px; height:64px; border-radius:8px; border:2px solid transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; }
+        .type-btn.selected { outline:3px solid #333; transform:translateY(-4px); }
+        .controls { margin-top:12px; }
+        .location-hint { margin-top:8px; font-size:0.9rem; color:#555; }
+        .color-preview { width:48px; height:48px; border-radius:6px; display:inline-block; vertical-align:middle; margin-left:8px; border:1px solid #ddd; }
     </style>
 </head>
 <body>
     <div class="map-page">
-        <!-- Map Canvas container window panel component workspace space -->
         <div class="map-left">
             <div id="map"></div>
         </div>
-        
-        <!-- Dedicated Side panel reporting layout controls form block container framework -->
         <div class="map-right">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 12px;">
-                <h3 style="color: #333;">Report an Issue</h3>
-                <a href="index.html" style="text-decoration: none; color: #007bff; font-weight: bold; font-size: 14px;">✕ Back Home</a>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0">Select Type of Issue</h3>
+                <a href="index.html" style="text-decoration:none;color:#007bff;">Back</a>
             </div>
 
-            <label>What would you like to report?</label>
-            <div class="type-grid" id="typeGrid">
-                <!-- Category type option select elements buttons generated via script properties execution loop parameters dynamically -->
+            <div class="type-grid" id="typeGrid" style="margin-top:12px;">
+                <!-- buttons inserted by map.js -->
             </div>
 
-            <div class="review-card">
-                <strong>Selected Type:</strong> <span id="selectedType">(None Selected)</span>
+            <div class="controls">
+                <label style="font-weight:700; display:block; margin-top:12px;">Location</label>
+                <div style="margin-top:8px;">
+                    <button id="useCurrentBtn">Use current location</button>
+                    <button id="enableDragBtn">Select location (drag pin)</button>
+                </div>
+                <div class="location-hint" id="latlngDisplay">No location selected</div>
             </div>
 
-            <label>Location Coordinate Target</label>
-            <div class="control-btns">
-                <button id="useCurrentBtn" type="button">📍 Use GPS Position</button>
-                <button id="clearMarkerBtn" type="button">Clear Pin</button>
+            <div style="margin-top:12px;">
+                <label style="font-weight:700; display:block;">Title</label>
+                <input id="title" type="text" placeholder="Short title" style="width:100%; padding:8px; margin-top:6px;" />
+                <label style="font-weight:700; display:block; margin-top:8px;">Description</label>
+                <textarea id="desc" rows="4" style="width:100%; padding:8px; margin-top:6px;"></textarea>
+                <label style="font-weight:700; display:block; margin-top:8px;">Your name (optional)</label>
+                <input id="reporter" type="text" style="width:100%; padding:8px; margin-top:6px;" />
+                <div style="margin-top:12px; display:flex; gap:8px; align-items:center;">
+                    <button id="submitBtn" style="flex:1;">Submit report</button>
+                    <div id="previewLabel" style="font-size:0.9rem; color:#333;">Preview</div>
+                    <div id="colorPreview" class="color-preview"></div>
+                </div>
+                <div id="submitMsg" style="margin-top:12px; color:green; display:none;">Report saved locally.</div>
             </div>
-            <div class="location-hint" id="latlngDisplay">No location selected. Click on the map to drop a pin.</div>
-
-            <label for="title">Issue Title</label>
-            <input id="title" type="text" placeholder="Short descriptive title" />
-            
-            <label for="desc">Detailed Description</label>
-            <textarea id="desc" rows="4" placeholder="Describe the problem layout circumstances parameters..."></textare
-            
-            <button id="submitBtn" type="button">Submit Report</button>
-            <div id="submitMsg" style="margin-top: 12px; color: green; font-weight: bold; text-align: center; display: none;">Report saved locally!</div>
         </div>
     </div>
 
-    <!-- 2. Leaflet JavaScript Engine Code Script Bundle Link Dependency Asset Execution Layer -->
-    <script src="https://unpkg.com" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    
-    <!-- 3. Dedicated clean application javascript logic engine setup configuration controls rules pipeline file reference -->
-    <script src=" map.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="map.js"></script>
 </body>
 </html>
