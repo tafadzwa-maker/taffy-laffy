@@ -1,10 +1,10 @@
 // Map page script: initializes map, draggable colored pin, and sidebar interactions
 const types = [
-    {button id: 'pothole', label: 'Pothole', color: '#d9534f' },
-    {button id: 'streetlight', label: 'Streetlight', color: '#f0ad4e' },
-    {button id: 'garbage', label: 'Garbage', color: '#5cb85c' },
-    {button id: 'sign', label: 'Sign', color: '#5bc0de' },
-    {button id: 'other', label: 'Other', color: '#6c757d' }
+    { id: 'pothole', label: 'Pothole', color: '#d9534f' },
+    { id: 'streetlight', label: 'Streetlight', color: '#f0ad4e' },
+    { id: 'garbage', label: 'Garbage', color: '#5cb85c' },
+    { id: 'sign', label: 'Sign', color: '#5bc0de' },
+    { id: 'other', label: 'Other', color: '#6c757d' }
 ];
 
 let map = null;
@@ -33,8 +33,9 @@ function init() {
     map = L.map(mapEl).setView([-33.931000, 18.859000], 13);
 
     L.tileLayer(
-       'https://{s}.tile.openstreermap.org/{z}/{x}/{y}.png',{attribution:@OpenStreetMapcontributors'
-}).addTo(map);
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        { attribution: 'Tiles © Esri — Source: Esri, Garmin, GeoEye, Earthstar Geographics', maxZoom: 19 }
+    ).addTo(map);
 
     // create a default marker at center (hidden until set)
     marker = L.marker([0,0], { draggable: true, opacity: 0 }).addTo(map);
@@ -50,11 +51,11 @@ function init() {
     types.forEach(t => {
         const btn = document.createElement('button');
         btn.className = 'type-btn';
-        btn.style.background =t.color;
-        btn.innerText =t.label[0];
-        btn.title =t.label;
-        btn.dataset.type =t.id;
-        btn.dataset.color =t.color;
+        btn.style.background = t.color;
+        btn.innerText = t.label[0];
+        btn.title = t.label;
+        btn.dataset.type = t.id;
+        btn.dataset.color = t.color;
         btn.addEventListener('click', () => { selectType(t.id); });
         typeGrid.appendChild(btn);
     });
@@ -72,27 +73,17 @@ function init() {
 
 function selectType(typeId) {
     selectedType = types.find(t => t.id === typeId);
-    
-    // Highlight selected button visually
-    document.querySelectorAll('.type-btn').forEach(b => {
-        b.classList.toggle('selected', b.dataset.type === typeId);
-    });
-    
-    // Update live color preview circle
-    if (colorPreview) colorPreview.style.backgroundColor = selectedType.color;
-    
-    // FIXED: Safely look for the element by its correct ID so the script doesn't crash
-    const sidebarLabel = document.getElementById('selectedType');
-    if (sidebarLabel) {
-        sidebarLabel.innerText = selectedType.label;
-    }
-    
-    // Update active pin color instantly if marker exists
+    // highlight selected
+    document.querySelectorAll('.type-btn').forEach(b => b.classList.toggle('selected', b.dataset.type === typeId));
+    // update preview color
+    const preview = document.getElementById('colorPreview');
+    preview.style.background = selectedType.color;
+    // update marker icon color if marker exists
     if (marker) {
         marker.setIcon(createIcon(selectedType.color));
+        marker.setOpacity(1);
     }
 }
-
 
 function setMarker(lat, lng) {
     marker.setLatLng([lat, lng]);
@@ -127,51 +118,6 @@ function submitReport() {
     localStorage.setItem('reports', JSON.stringify(reports));
     const msg = document.getElementById('submitMsg'); msg.style.display='block';
     setTimeout(() => { msg.style.display='none'; }, 1400);
-}<h3>Drop a pin for the issue location</h3>
-<div id="map" style="height: 400px; width: 100%; border-radius: 8px; margin: 12px 0;"></div>
-<button type="button" id="useGPS">📍 Use My Current Location</button>
-<p>Selected: <span id="coords">Click on map</span></p>
-
-<!-- Hidden inputs for your form -->
-<input type="hidden" id="latitude" name="latitude">
-<input type="hidden" id="longitude" name="longitude">
-
-<script>
-let map;
-let marker;
-
-function initMap() {
-  // Start at Cape Town
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -33.9249, lng: 18.4241 }, 
-    zoom: 12,
-  });
-
-  map.addListener("click", (e) => {
-    placeMarker(e.latLng);
-  });
-
-  document.getElementById("useGPS").onclick = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const pos = { lat: position.coords.latitude, lng: position.coords.longitude };
-        map.setCenter(pos);
-        map.setZoom(16);
-        placeMarker(pos);
-      });
-    } else {
-      alert("GPS  supported");
-    }
-  }
 }
 
-function placeMarker(location) {
-  if (marker) marker.setMap(null);
-  marker = new google.maps.Marker({ position: location, map: map });
-  document.getElementById('coords').innerText = location.lat().toFixed(5) + ', ' + location.lng().toFixed(5);
-  document.getElementById('latitude').value = location.lat();
-  document.getElementById('longitude').value = location.lng();
-}
-</body>
-</html>
-
+window.addEventListener('load', init);
