@@ -1,43 +1,43 @@
-// --- Quiz Functionality ---
 let score = 0;
-const totalQuestions = 3;
-let answered = 0;
+        const totalQuestions = 3;
+        let answered = 0;
 
-const buttons = document.querySelectorAll('.answer-btn');
+        const buttons = document.querySelectorAll('.answer-btn');
 
-buttons.forEach(button => {
-    button.addEventListener('click', () => {
-        if (button.disabled) return;
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.disabled) return;
 
-        const isCorrect = button.getAttribute('data-correct') === 'true';
-        if (isCorrect) {
-            score++;
-            const scoreElem = document.getElementById('score');
-            if (scoreElem) scoreElem.innerText = score;
-        }
+                const isCorrect = button.getAttribute('data-correct') === 'true';
+                if (isCorrect) {
+                    score++;
+                    document.getElementById('score').innerText = score;
+                }
 
-        const questionDiv = button.parentElement;
-        const btnsInQuestion = questionDiv.querySelectorAll('.answer-btn');
-        btnsInQuestion.forEach(btn => btn.disabled = true);
+                const questionDiv = button.parentElement;
+                const btnsInQuestion = questionDiv.querySelectorAll('.answer-btn');
+                btnsInQuestion.forEach(btn => btn.disabled = true);
 
-        answered++;
-        if (answered === totalQuestions) {
-            alert('Quiz complete! Your final score: ' + score + '/' + totalQuestions);
-        }
-    });
-});
+                answered++;
+                if (answered === totalQuestions) {
+                    alert('Quiz complete! Your final score: ' + score + '/' + totalQuestions);
+                }
+            });
+        });
 
-// --- Background Video Control ---
+// Get references to the video element and the button
 const video = document.getElementById('bgVideo');
 const muteButton = document.getElementById('muteBtn');
+
+// Variable to track mute state (initially true because video starts with muted attribute)
 let isMuted = true;
 
+// Function to toggle sound
 function toggleMute() {
-    if (!video || !muteButton) return;
     if (isMuted) {
         video.muted = false;
         muteButton.textContent = '🔊 Unmute';
-        muteButton.style.backgroundColor = '#4caf50'; 
+        muteButton.style.backgroundColor = '#4caf50'; // greenish tone when sound is on
         isMuted = false;
     } else {
         video.muted = true;
@@ -47,20 +47,17 @@ function toggleMute() {
     }
 }
 
-// FIXED: Added safety check to prevent crash if mute button is absent in HTML
-if (muteButton) {
-    muteButton.addEventListener('click', toggleMute);
-}
+// Add event listener to the button
+muteButton.addEventListener('click', toggleMute);
 
-if (video) {
-    video.addEventListener('play', () => {
-        console.log('Video is playing');
-    });
+// Optional: If the video fails to autoplay due to browser policies, you can catch the error
+video.addEventListener('play', () => {
+    console.log('Video is playing');
+});
 
-    video.addEventListener('error', () => {
-        console.warn('Video failed to load. Check your video source.');
-    });
-}
+video.addEventListener('error', () => {
+    console.warn('Video failed to load. Check your video source.');
+});
 
 // --- Reporting / Map / Sidebar functionality ---
 let mapInitialized = false;
@@ -76,17 +73,19 @@ const clearMarker = document.getElementById('clearMarker');
 const submitReport = document.getElementById('submitReport');
 
 function openModal() {
-    if (reportModal) {
-        reportModal.style.display = 'flex';
-    }
+    // kept for backward compatibility if modal exists
+    reportModal.style.display = 'flex';
     if (!mapInitialized) initMap();
 }
 
+// Try to show user's current location when modal opens
 function tryShowCurrentOnOpen() {
     if (!navigator.geolocation) return;
+    // Only attempt if no marker yet
     if (marker) return;
     navigator.geolocation.getCurrentPosition(pos => {
         const latlng = [pos.coords.latitude, pos.coords.longitude];
+        // ensure map is ready
         if (mapInitialized) {
             placeMarker(latlng);
             map.setView(latlng, 16);
@@ -95,124 +94,68 @@ function tryShowCurrentOnOpen() {
 }
 
 function closeModalFn() {
-    if (reportModal) {
-        reportModal.style.display = 'none';
-    }
+    reportModal.style.display = 'none';
 }
 
-// FIXED: Modified line 78 to open modal interface directly instead of navigating to map.html
-if (reportBtn) {
-    reportBtn.addEventListener('click', openModal);
-}
-if (closeModal) {
-    closeModal.addEventListener('click', closeModalFn);
-}
-if (submitReport) {
-    submitReport.addEventListener('click', async () => {
-
-        const titleElem = document.getElementById('title');
-        const descElem = document.getElementById('desc');
-        const reporterElem = document.getElementById('reporter');
-        const attachmentElem = document.getElementById('attachment');
-
+// When on the homepage, take user to full page map reporting UI.
+reportBtn.addEventListener('click', () => { window.location.href = 'map.html'; });
+closeModal.addEventListener('click', closeModalFn);
+reportModal.addEventListener('click', (e) => { if (e.target===reportModal) closeModalFn(); });
 
 reportTypeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         selectedType = btn.getAttribute('data-type');
-        if (selectedTypeElem) {
-            selectedTypeElem.innerText = btn.innerText;
-        }
+        selectedTypeElem.innerText = selectedType;
     });
 });
 
 function initMap() {
     mapInitialized = true;
-    // Default fallback coordinates centered broad view
-    map = L.map('map').setView([-33.9249, 18.4241], 11);
-    
+    map = L.map('map').setView([20,0], 2);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
     map.on('click', (e) => {
         placeMarker(e.latlng);
     });
-    
-    setTimeout(() => { 
-        try { map.invalidateSize(); } catch(err){} 
-    }, 250);
-    
+    // Fix size when placed inside a modal
+    setTimeout(() => { try { map.invalidateSize(); } catch(e){} }, 200);
+    // Try to show current location automatically
     tryShowCurrentOnOpen();
 }
 
 function placeMarker(latlng) {
+    // normalize latlng: accept array [lat,lng] or object {lat,lng}
     let ll = latlng;
     if (Array.isArray(latlng)) ll = L.latLng(latlng[0], latlng[1]);
     if (ll && ll.lat === undefined && ll.lat !== 0) return;
-    
-    if (marker) {
-        marker.setLatLng(ll);
-    } else {
-        marker = L.marker(ll, {draggable: true}).addTo(map);
-    }
+    if (marker) marker.setLatLng(ll);
+    else marker = L.marker(ll, {draggable:true}).addTo(map);
     map.setView(ll, 16);
+    marker.on('dragend', () => {});
 }
 
-if (useCurrent) {
-    useCurrent.addEventListener('click', () => {
-        if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
-        navigator.geolocation.getCurrentPosition(pos => {
-            const latlng = [pos.coords.latitude, pos.coords.longitude];
-            placeMarker(latlng);
-        }, err => { alert('Unable to retrieve location'); });
-    });
-}
+useCurrent.addEventListener('click', () => {
+    if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
+    navigator.geolocation.getCurrentPosition(pos => {
+        const latlng = [pos.coords.latitude, pos.coords.longitude];
+        placeMarker(latlng);
+    }, err => { alert('Unable to retrieve location'); });
+});
 
-if (clearMarker) {
-    clearMarker.addEventListener('click', () => { 
-        if (marker) { 
-            map.removeLayer(marker); 
-            marker = null; 
-        } 
-    });
-}
+clearMarker.addEventListener('click', () => { if (marker) { map.removeLayer(marker); marker = null; } });
 
-if (submitReport) {
-    submitReport.addEventListener('click', () => {
-        const titleElem = document.getElementById('title');
-        const descElem = document.getElementById('desc');
-        const reporterElem = document.getElementById('reporter'); // Safely handles lack of reporter input field
-        
-        const title = titleElem ? titleElem.value.trim() : "";
-        const desc = descElem ? descElem.value.trim() : "";
-        const reporter = reporterElem ? reporterElem.value.trim() : "Anonymous";
-        
-        if (!selectedType) { alert('Please choose a report type'); return; }
-        if (!marker) { alert('Please select a location on the map or use current location'); return; }
-        
-        const latlng = marker.getLatLng();
-        const reports = JSON.parse(localStorage.getItem('reports') || '[]');
-        
-        reports.push({ 
-            type: selectedType, 
-            title, 
-            desc, 
-            reporter, 
-            lat: latlng.lat, 
-            lng: latlng.lng, 
-            ts: Date.now() 
-        });
-        
-        localStorage.setItem('reports', JSON.stringify(reports));
-        
-        const msg = document.getElementById('submitMsg'); 
-        if (msg) msg.style.display = 'block';
-        
-        setTimeout(() => { 
-            if (msg) msg.style.display = 'none'; 
-            closeModalFn(); 
-        }, 1200);
-    });
-}
-
-   
+submitReport.addEventListener('click', () => {
+    const title = document.getElementById('title').value.trim();
+    const desc = document.getElementById('desc').value.trim();
+    const reporter = document.getElementById('reporter').value.trim();
+    if (!selectedType) { alert('Please choose a report type'); return; }
+    if (!marker) { alert('Please select a location on the map or use current location'); return; }
+    const latlng = marker.getLatLng();
+    const reports = JSON.parse(localStorage.getItem('reports') || '[]');
+    reports.push({ type: selectedType, title, desc, reporter, lat: latlng.lat, lng: latlng.lng, ts: Date.now() });
+    localStorage.setItem('reports', JSON.stringify(reports));
+    const msg = document.getElementById('submitMsg'); msg.style.display='block';
+    setTimeout(() => { msg.style.display='none'; closeModalFn(); }, 1200);
+});
