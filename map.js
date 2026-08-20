@@ -1,4 +1,3 @@
-
 // Map page script: initializes map, draggable colored pin, and sidebar interactions
 const types = [
     {button id: 'pothole', label: 'Pothole', color: '#d9534f' },
@@ -175,3 +174,4 @@ function placeMarker(location) {
 }
 </body>
 </html>
+
